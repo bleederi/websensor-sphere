@@ -43,7 +43,7 @@ function convert_orientation(orimatrix) {        //Convert orientation matrix to
         angles.alpha = alpha;
         angles.beta = beta;
         angles.gamma = gamma;
-        return angles;
+        return angles;  //from -pi to pi
 }
 
 function startSensors() {
@@ -70,7 +70,7 @@ function startSensors() {
         absoluteorientationsensor.onchange = event => {
                 absoluteorientationsensor.populateMatrix(orientationMat);
                 angles = convert_orientation(orientationMat);
-                console.log(angles);
+                //console.log(angles);
         }
         absoluteorientationsensor.onerror = err => {
           absoluteorientationsensor = null;

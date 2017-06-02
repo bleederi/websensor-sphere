@@ -85,13 +85,13 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                function render(){
 				
 				requestAnimationFrame(render);
-				
-				if(!manualControl){
-					longitude += 0.1;
-				}
-
+                                console.log(angles);
+				longitude = -angles.alpha * 180 / Math.PI;
+				latitude = angles.gamma * 180 / Math.PI - 90;
+                                console.log(latitude);
+                                console.log(longitude);
 				// limiting latitude from -85 to 85 (cannot point to the sky or under your feet)
-                    latitude = Math.max(-85, Math.min(85, latitude));
+                                latitude = Math.max(-85, Math.min(85, latitude));
 
 				// moving the camera according to current latitude (vertical movement) and longitude (horizontal movement)
 				camera.target.x = 500 * Math.sin(THREE.Math.degToRad(90 - latitude)) * Math.cos(THREE.Math.degToRad(longitude));
