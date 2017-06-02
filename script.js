@@ -19,24 +19,32 @@
 */
 
 var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //orientation
-var angles = {'alpha':null, 'beta':null, 'gamma':null};
+var angles = {alpha:null, beta:null, gamma:null};
+var sensors = {};
 var sensorfreq = 60;    //for setting desired sensor frequency
 
 
-def convert_orientation(orimatrix):      #Convert orientation matrix to Euler angles
-        angles = {}   #Dict to store Euler angle values
-        r11 = orimatrix['0']
-        r21 = orimatrix['4']
-        r31 = orimatrix['8']
-        r32 = orimatrix['9']
-        r33 = orimatrix['10']
-        betadivisor = math.sqrt(math.pow(r32,2) + math.pow(r33,2))
-        if(r11 != 0 and r33 != 0 and betadivisor != 0): #Can't divide by zero
-                alpha = math.atan2(r21, r11)
-                beta = math.atan2(-r31, (math.sqrt(math.pow(r32,2) + math.pow(r33,2))))
-                gamma = math.atan2(r32, r33)
-        angles = {'alpha': alpha, 'beta': beta, 'gamma': gamma}
-        return angles
+
+function convert_orientation(orimatrix) {        //Convert orientation matrix to Euler angles
+        let alpha = 0;
+        let beta = 0;
+        let gamma = 0;
+        let r11 = orimatrix[0]
+        let r21 = orimatrix[4]
+        let r31 = orimatrix[8]
+        let r32 = orimatrix[9]
+        let r33 = orimatrix[10]
+        let betadivisor = Math.sqrt(Math.pow(r32,2) + Math.pow(r33,2));
+        if(r11 != 0 && r33 != 0 && betadivisor != 0) { //Can't divide by zero
+                alpha = Math.atan2(r21, r11);
+                beta = Math.atan2(-r31, (Math.sqrt(Math.pow(r32,2) + Math.pow(r33,2))));
+                gamma = Math.atan2(r32, r33);
+        }        
+        angles.alpha = alpha;
+        angles.beta = beta;
+        angles.gamma = gamma;
+        return angles;
+}
 
 function startSensors() {
         try {
