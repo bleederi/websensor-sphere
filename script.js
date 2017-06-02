@@ -48,22 +48,6 @@ function convert_orientation(orimatrix) {        //Convert orientation matrix to
 
 function startSensors() {
         try {
-        //Accelerometer including gravity
-        /*
-        accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
-        sensors.Accelerometer = accelerometer;
-        gravity =  new LowPassFilterData(accelerometer, 0.8);
-        accelerometer.onchange = event => {
-                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                gravity.update(accel);
-                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-        }
-        accelerometer.onerror = err => {
-          accelerometer = null;
-          console.log(`Accelerometer ${err.error}`)
-        }
-        accelerometer.start();
-        */
         //AbsoluteOrientationSensor
         absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -77,19 +61,6 @@ function startSensors() {
           console.log(`Absolute orientation sensor ${err.error}`)
         };
         absoluteorientationsensor.start();
-        /*
-        //Gyroscope
-        gyroscope = new Gyroscope({ frequency: sensorfreq});
-        sensors.Gyroscope = gyroscope;
-        gyroscope.onchange = event => {
-                velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-        }
-        gyroscope.onerror = err => {
-          gyroscope = null;
-          console.log(`Gyroscope ${err.error}`)
-        };
-        gyroscope.start();
-        */
         } catch(err) { console.log(err); }
         sensors_started = true;
         return sensors;

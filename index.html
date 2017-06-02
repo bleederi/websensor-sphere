@@ -75,10 +75,6 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                         //start sensors
                         startSensors();
 
-			// listeners
-			document.addEventListener("mousedown", onDocumentMouseDown, false);
-			document.addEventListener("mousemove", onDocumentMouseMove, false);
-			document.addEventListener("mouseup", onDocumentMouseUp, false);
 				
                render();
                
@@ -103,46 +99,6 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 				renderer.render(scene, camera);
 				
 			}
-			
-			// when the mouse is pressed, we switch to manual control and save current coordinates
-			function onDocumentMouseDown(event){
-
-				event.preventDefault();
-
-				manualControl = true;
-
-				savedX = event.clientX;
-				savedY = event.clientY;
-
-				savedLongitude = longitude;
-				savedLatitude = latitude;
-
-			}
-
-			// when the mouse moves, if in manual contro we adjust coordinates
-			function onDocumentMouseMove(event){
-
-				if(manualControl){
-					longitude = (savedX - event.clientX) * 0.1 + savedLongitude;
-					latitude = (event.clientY - savedY) * 0.1 + savedLatitude;
-				}
-
-			}
-
-			// when the mouse is released, we turn manual control off
-			function onDocumentMouseUp(event){
-
-				manualControl = false;
-
-			}
-			
-			// pressing a key (actually releasing it) changes the texture map
-			document.onkeyup = function(event){
-			
-				panoramaNumber = (panoramaNumber + 1) % panoramasArray.length
-				sphereMaterial.map = THREE.ImageUtils.loadTexture(panoramasArray[panoramaNumber])
-			
-    			}
 			
 		</script>
 	</body>
