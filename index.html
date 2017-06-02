@@ -71,6 +71,9 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 			// geometry + material = mesh (actual object)
 			var sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
 			scene.add(sphereMesh);
+                        
+                        //start sensors
+                        startSensors();
 
 			// listeners
 			document.addEventListener("mousedown", onDocumentMouseDown, false);

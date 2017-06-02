@@ -18,7 +18,25 @@
 
 */
 
+var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //orientation
+var angles = {'alpha':null, 'beta':null, 'gamma':null};
 var sensorfreq = 60;    //for setting desired sensor frequency
+
+
+def convert_orientation(orimatrix):      #Convert orientation matrix to Euler angles
+        angles = {}   #Dict to store Euler angle values
+        r11 = orimatrix['0']
+        r21 = orimatrix['4']
+        r31 = orimatrix['8']
+        r32 = orimatrix['9']
+        r33 = orimatrix['10']
+        betadivisor = math.sqrt(math.pow(r32,2) + math.pow(r33,2))
+        if(r11 != 0 and r33 != 0 and betadivisor != 0): #Can't divide by zero
+                alpha = math.atan2(r21, r11)
+                beta = math.atan2(-r31, (math.sqrt(math.pow(r32,2) + math.pow(r33,2))))
+                gamma = math.atan2(r32, r33)
+        angles = {'alpha': alpha, 'beta': beta, 'gamma': gamma}
+        return angles
 
 function startSensors() {
         try {
@@ -43,6 +61,8 @@ function startSensors() {
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
         absoluteorientationsensor.onchange = event => {
                 absoluteorientationsensor.populateMatrix(orientationMat);
+                angles = convert_orientation(orientationMat);
+                console.log(angles);
         }
         absoluteorientationsensor.onerror = err => {
           absoluteorientationsensor = null;
