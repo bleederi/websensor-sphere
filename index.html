@@ -31,76 +31,126 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 			}
 		</style>
 		<script src="three.min.js"></script>
-                <script type="text/javascript" src="script.js"></script>
 		
 	</head>
+        <template id="sphere-view">
+                <style>
+                :host {
+                width: 100vh;
+                height: 100vh;
+                }
+                canvas {
+                margin: 16px;
+                }
+                </style>
+        </template>
 	<body>
 		<script>
-			
-			var manualControl = false;
-			var longitude = 0;
-			var latitude = 0;
-			var savedX;
-			var savedY;
-			var savedLongitude;
-			var savedLatitude;
-			
-			// panoramas background
-			var panoramasArray = ["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg"];
-			var panoramaNumber = Math.floor(Math.random()*panoramasArray.length);
-
-			// setting up the renderer
-			renderer = new THREE.WebGLRenderer();
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			document.body.appendChild(renderer.domElement);
-			
-			// creating a new scene
-			var scene = new THREE.Scene();
-			
-			// adding a camera
-			var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-			camera.target = new THREE.Vector3(0, 0, 0);
-
-			// creation of a big sphere geometry
-			var sphere = new THREE.SphereGeometry(100, 100, 40);
-			sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
-
-			// creation of the sphere material
-			var sphereMaterial = new THREE.MeshBasicMaterial();
-			sphereMaterial.map = THREE.ImageUtils.loadTexture(panoramasArray[panoramaNumber])
-
-			// geometry + material = mesh (actual object)
-			var sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
-			scene.add(sphereMesh);
                         
-                        //start sensors
-                        startSensors();
 
-				
-               render();
-               
-               function render(){
-				
-				requestAnimationFrame(render);
-                                console.log(angles);
-				longitude = -angles.alpha * 180 / Math.PI;
-				latitude = angles.gamma * 180 / Math.PI - 90;
-                                console.log(latitude);
-                                console.log(longitude);
-				// limiting latitude from -85 to 85 (cannot point to the sky or under your feet)
-                                latitude = Math.max(-85, Math.min(85, latitude));
+                        function toEulerianAngle(quat, out)
+                        {
+                                const ysqr = quat[1] ** 2;
+                                // Roll (x-axis rotation).
+                                const t0 = 2 * (quat[3] * quat[0] + quat[1] * quat[2]);
+                                const t1 = 1 - 2 * (ysqr + quat[0] ** 2);
+                                out[0] = Math.atan2(t0, t1);
+                                // Pitch (y-axis rotation).
+                                let t2 = 2 * (quat[3] * quat[1] - quat[2] * quat[0]);
+                                t2 = t2 > 1 ? 1 : t2;
+                                t2 = t2 < -1 ? -1 : t2;
+                                out[1] = Math.asin(t2);
+                                // Yaw (z-axis rotation).
+                                const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
+                                const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
+                                out[2] = Math.atan2(t3, t4);
+                                return out;
+                        }
+                        class InclinationSensor {
+                                constructor() {
+                                const sensor = new AbsoluteOrientationSensor({ frequency: 30 });
+                                const mat4 = new Float32Array(16);
+                                const euler = new Float32Array(3);
+                                sensor.onchange = () => {
+                                        sensor.populateMatrix(mat4);
+                                        toEulerianAngle(sensor.quaternion, euler);
+                                        this.roll = euler[0];
+                                        this.yaw = euler[2];
+                                        if (this.onchange) this.onchange();
+                                };
+                                sensor.onactivate = () => {
+                                        if (this.onactivate) this.onactivate();
+                                }
+                                const start = () => sensor.start();
+                                Object.assign(this, { start });
+                                }
+                        }
+                        customElements.define('sphere-view', class extends HTMLElement {
+                        constructor() {
+                        super();
+                        const template = document.querySelector('#sphere-view');
+                        const clone = document.importNode(template.content, true);
+                        const shadowRoot = this.attachShadow({ mode: 'open' });
+                        shadowRoot.appendChild(clone);
+                        }
+                        connectedCallback() {
+                        this.latitude;
+                        this.longitude;
 
-				// moving the camera according to current latitude (vertical movement) and longitude (horizontal movement)
-				camera.target.x = 500 * Math.sin(THREE.Math.degToRad(90 - latitude)) * Math.cos(THREE.Math.degToRad(longitude));
-				camera.target.y = 500 * Math.cos(THREE.Math.degToRad(90 - latitude));
-				camera.target.z = 500 * Math.sin(THREE.Math.degToRad(90 - latitude)) * Math.sin(THREE.Math.degToRad(longitude));
-				camera.lookAt(camera.target);
+                        //ThreeJS scene setup below
 
-				// calling again render function
-				renderer.render(scene, camera);
-				
-			}
+			// panoramas background
+			this.panoramasArray = ["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg"];
+			this.panoramaNumber = Math.floor(Math.random()*this.panoramasArray.length);
+			// setting up the renderer
+			this.renderer = new THREE.WebGLRenderer();
+			this.renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(this.renderer.domElement);
+			// creating a new scene
+			this.scene = new THREE.Scene();
+			// adding a camera
+			this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+			this.camera.target = new THREE.Vector3(0, 0, 0);
+			// creation of a big sphere geometry
+			let sphere = new THREE.SphereGeometry(100, 100, 40);
+			sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
+			// creation of the sphere material
+			let sphereMaterial = new THREE.MeshBasicMaterial();
+                        let textureLoader = new THREE.TextureLoader():
+			sphereMaterial.map = textureLoader.load(this.panoramasArray[this.panoramaNumber])
+			// geometry + material = mesh (actual object)
+			let sphereMesh = new THREE.Mesh(sphere, sphereMaterial);
+			this.scene.add(sphereMesh);
+
+                        const sensor = new InclinationSensor();
+                        sensor.onchange = () => {
+                        this.roll = sensor.roll;
+                        this.yaw = sensor.yaw;
+                        }
+                        sensor.onactivate = () => this.render();
+                        sensor.start();
+                        }
+
+                        render() {
+                                this.longitude = -this.yaw * 180 / Math.PI;
+                                this.latitude = this.roll * 180 / Math.PI - 90;
+                                // limiting latitude from -85 to 85 (cannot point to the sky or under your feet)
+                                this.latitude = Math.max(-85, Math.min(85, this.latitude));
+
+                                // moving the camera according to current latitude (vertical movement) and longitude (horizontal movement)
+                                this.camera.target.x = 500 * Math.sin(THREE.Math.degToRad(90 - this.latitude)) * Math.cos(THREE.Math.degToRad(this.longitude));
+                                this.camera.target.y = 500 * Math.cos(THREE.Math.degToRad(90 - this.latitude));
+                                this.camera.target.z = 500 * Math.sin(THREE.Math.degToRad(90 - this.latitude)) * Math.sin(THREE.Math.degToRad(this.longitude));
+                                this.camera.lookAt(this.camera.target);
+
+                                // calling again render function
+                                this.renderer.render(this.scene, this.camera);
+                                requestAnimationFrame(() => this.render());
+                        }
+                        });
 			
 		</script>
+                <sphere-view></sphere-view>
 	</body>
 </html>
+
