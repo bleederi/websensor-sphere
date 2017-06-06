@@ -54,6 +54,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 quat[1] = quat[1];
                                 quat[2] = -quat[2];
                                 const ysqr = quat[1] ** 2;
+                                console.log(quat);
                
                                 // Roll (x-axis rotation).
                                 const t0 = 2 * (quat[3] * quat[0] + quat[1] * quat[2]);
@@ -68,7 +69,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
                                 const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
                                 out[2] = Math.atan2(t3, t4);
-                                console.log(quat);
+                                console.log("QUAT:", quat);
                                 console.log(out);
                                 return out;
                         }
