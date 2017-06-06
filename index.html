@@ -50,9 +50,10 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 
                         function toEulerianAngle(quat, out)
                         {
-             quat[0] = -quat[0];
-quat[1] = -quat[1];
-quat[2] = -quat[2];
+let w = quat[3];
+let k = quat[0];
+quat[0] = w;
+quat[3] = k;
                                 const ysqr = quat[1] ** 2;
                
                                 // Roll (x-axis rotation).
