@@ -50,7 +50,11 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 
                         function toEulerianAngle(quat, out)
                         {
+             quat[0] = -quat[0];
+quat[1] = -quat[1];
+quat[2] = -quat[2];
                                 const ysqr = quat[1] ** 2;
+               
                                 // Roll (x-axis rotation).
                                 const t0 = 2 * (quat[3] * quat[0] + quat[1] * quat[2]);
                                 const t1 = 1 - 2 * (ysqr + quat[0] ** 2);
@@ -74,8 +78,8 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 sensor.onchange = () => {
                                         sensor.populateMatrix(mat4);
                                         toEulerianAngle(sensor.quaternion, euler);
-                                        this.roll = -euler[0];
-                                        this.yaw = -euler[2];
+                                        this.roll = euler[0];
+                                        this.yaw = euler[2];
                                         if (this.onchange) this.onchange();
                                 };
                                 sensor.onactivate = () => {
