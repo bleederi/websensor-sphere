@@ -65,6 +65,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
                                 const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
                                 out[2] = Math.atan2(t3, t4);
+                                console.log("QUAT:", quat);
                                 return out;
                         }
                         class InclinationSensor {
@@ -75,7 +76,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 sensor.onchange = () => {
                                         sensor.populateMatrix(mat4);
                                         let angles = toEulerianAngle(sensor.quaternion, euler);
-                                        console.log(angles);
+                                        console.log("ANGLES:", angles);
                                         this.roll = euler[0];
                                         this.yaw = euler[2];
                                         if (this.onchange) this.onchange();
