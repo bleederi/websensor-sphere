@@ -50,10 +50,6 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 
                         function toEulerianAngle(quat, out)
                         {
-                                console.log(quat);
-                                quat[0] = -quat[0] + 6;
-                                quat[1] = quat[1];
-                                quat[2] = -quat[2];
                                 const ysqr = quat[1] ** 2;
                
                                 // Roll (x-axis rotation).
@@ -69,8 +65,6 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 const t3 = 2 * (quat[3] * quat[2] + quat[0] * quat[1]);
                                 const t4 = 1 - 2 * (ysqr + quat[2] ** 2);
                                 out[2] = Math.atan2(t3, t4);
-                                console.log("QUAT AFTER:", quat);
-                                console.log(out);
                                 return out;
                         }
                         class InclinationSensor {
@@ -80,7 +74,8 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 const euler = new Float32Array(3);
                                 sensor.onchange = () => {
                                         sensor.populateMatrix(mat4);
-                                        toEulerianAngle(sensor.quaternion, euler);
+                                        let angles = toEulerianAngle(sensor.quaternion, euler);
+                                        console.log(angles);
                                         this.roll = euler[0];
                                         this.yaw = euler[2];
                                         if (this.onchange) this.onchange();
