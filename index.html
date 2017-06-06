@@ -74,8 +74,8 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 sensor.onchange = () => {
                                         sensor.populateMatrix(mat4);
                                         toEulerianAngle(sensor.quaternion, euler);
-                                        this.roll = euler[0];
-                                        this.yaw = euler[2];
+                                        this.roll = -euler[0];
+                                        this.yaw = -euler[2];
                                         if (this.onchange) this.onchange();
                                 };
                                 sensor.onactivate = () => {
