@@ -70,7 +70,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                         }
                         class InclinationSensor {
                                 constructor() {
-                                const sensor = new AbsoluteOrientationSensor({ frequency: 30 });
+                                const sensor = new AbsoluteOrientationSensor({ frequency: 60 });
                                 const mat4 = new Float32Array(16);
                                 const euler = new Float32Array(3);
                                 sensor.onchange = () => {
