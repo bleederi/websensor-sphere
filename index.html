@@ -129,6 +129,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                         const sensor = new InclinationSensor();
                         sensor.onchange = () => {
                         this.roll = sensor.roll;
+                        this.pitch = sensor.pitch;
                         this.yaw = sensor.yaw;
                         }
                         sensor.onactivate = () => this.render();
@@ -141,7 +142,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 if(tablet)
                                 {
                                         this.longitude = this.pitch * 180 / Math.PI;
-                                        this.latitude = (-this.roll) * 180 / Math.PI - 180;
+                                        this.latitude = -this.roll * 180 / Math.PI - 180;
                                 }
                                 else
                                 {
