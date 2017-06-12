@@ -141,7 +141,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 if(tablet)
                                 {
                                         this.longitude = this.pitch * 180 / Math.PI
-                                        this.latitude = this.roll * 180 / Math.PI + 180;
+                                        this.latitude = -this.roll * 180 / Math.PI;
                                 }
                                 else
                                 {
