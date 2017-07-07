@@ -73,14 +73,14 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
                                 const sensor = new AbsoluteOrientationSensor({ frequency: 60 });
                                 const mat4 = new Float32Array(16);
                                 const euler = new Float32Array(3);
-                                sensor.onchange = () => {
+                                sensor.onreading = () => {
                                         sensor.populateMatrix(mat4);
                                         let angles = toEulerianAngle(sensor.quaternion, euler);
                                         console.log("ANGLES:", angles);
                                         this.roll = euler[0];
                                         this.pitch = euler[1];
                                         this.yaw = euler[2];
-                                        if (this.onchange) this.onchange();
+                                        if (this.onreading) this.onreading();
                                 };
                                 sensor.onactivate = () => {
                                         if (this.onactivate) this.onactivate();
@@ -127,7 +127,7 @@ Code based on tutorial from http://www.emanueleferonato.com/2014/12/10/html5-web
 			this.scene.add(sphereMesh);
 
                         const sensor = new InclinationSensor();
-                        sensor.onchange = () => {
+                        sensor.onreading = () => {
                         this.roll = sensor.roll;
                         this.pitch = sensor.pitch;
                         this.yaw = sensor.yaw;
